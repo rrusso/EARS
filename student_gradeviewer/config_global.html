@@ -1,0 +1,176 @@
+<div style="text-align:center;">
+<span>
+    <strong><?php print_string('mentee_config', 'block_student_gradeviewer'); 
+                  helpbutton('mentee_config', 'mentee_config', 'block_student_gradeviewer');?></strong>
+</span>
+<table cellspacing="5">
+    <?php
+        require_once($CFG->dirroot . '/blocks/student_gradeviewer/automaticlib.php');
+
+        $moodle_roles = get_records_menu('role', '', '', 'sortorder', 'id, name');
+
+        $config_values = array('negative_value', 'positive_value', 'items');
+        $semesters = current_semester(time(), true);
+        if(!$semesters) $semesters = array();
+    ?>
+
+    <tr>
+        <td valign="top" align="right">
+            <span><?php 
+                        $threshold = get_string('user_threshold', 'block_student_gradeviewer');
+                        echo $threshold;
+                   ?>
+            </span>
+        </td>
+        <td valign="top" align="left">
+            <input type="text" name="block_student_gradeviewer_threshold" value="<?php
+                if(isset($CFG->block_student_gradeviewer_threshold)) {
+                    echo $CFG->block_student_gradeviewer_threshold;
+                } else {
+                    echo 10;
+                } ?>" />
+        </td>
+    </tr>
+   
+    <?php
+        foreach(array('academics', 'sports', 'cas_admin', 'acsa_admin') as $school) {
+            echo '<tr><td valign="top" align="right">';
+            echo '<span>'.get_string($school. '_mentor', 
+                                    'block_student_gradeviewer').'</span></td><td>';
+            choose_from_menu($moodle_roles, 'block_student_gradeviewer_'.$school,
+                            $CFG->{'block_student_gradeviewer_'.$school});
+            echo '</td></tr>';
+        }
+    ?>
+</table>
+<span>
+    <strong><?php print_string('automatic_config', 'block_student_gradeviewer'); 
+                  helpbutton('automatic_config', 'automatic_config', 'block_student_gradeviewer');?></strong>
+</span>
+<table cellspacing="5">
+    <tr>
+        <td valign="top" align="right"><?php print_string('enable_logging', 'block_student_gradeviewer');?></td>
+        <td valign="top" align="left">
+            <?php
+            $checked = (empty($CFG->block_student_gradeviewer_enable)) ? "" : 'checked="CHECKED"'; 
+            echo '<input type="hidden" name="block_student_gradeviewer_enable" value="0"/>
+                  <input type="checkbox" name="block_student_gradeviewer_enable" value="1" '.$checked.'/>';
+            ?>
+        </td>
+    </tr>
+    <?php
+        foreach(array('cas_email', 'acsa_email') as $email) {
+            $checked = (empty($CFG->{$email})) ? '' : 'checked="checked"';
+            echo '<tr>
+                    <td valign="top" align="right">'.
+                        get_string($email,'block_student_gradeviewer').
+                    '</td>
+                    <td align="left">
+                        <input type="hidden" name="'.$email.'" value="0"/>
+                        <input type="checkbox" name="'.$email.'" value="1" '.$checked.'/>
+                    </td>
+                  </tr>';
+        }
+
+        $inputs = array_reduce(array('primary', 'non_primary', 'student'), create_function('$in, $opt','
+            global $CFG;
+            $inter = (empty($in)) ? "" : $in;
+            $name = "cas_reporting_$opt";
+            $checked = (!empty($CFG->{$name})) ? "CHECKED" : "";
+            
+            return $inter . 
+            "<input type=\"hidden\" name=\"$name\" value=\"0\"/>
+             <input type=\"checkbox\" style=\"margin-right: 1px;\"
+                    name=\"$name\" value=\"1\" $checked/>" .
+            get_string($opt, "block_student_gradeviewer");
+        '));
+
+        echo '<tr>
+                <td valign="top" align="right">'.
+                    get_string('default_reporting', 'block_student_gradeviewer').'
+                </td>
+                <td valign="top" align="left">
+                    '.$inputs.'
+                </td>
+              </tr>';
+
+        $checked = (!empty($CFG->block_student_gradeviewer_non_primary_control)) ? 'checked="checked"' : '';
+
+        echo '<tr>
+                <td valign="top" align="right">
+                    '.get_string('non_primary_control','block_student_gradeviewer').'
+                </td>
+                <td valign="top" align="left">
+                    <input type="hidden" name="block_student_gradeviewer_non_primary_control" value="0"/>
+                    <input type="checkbox" name="block_student_gradeviewer_non_primary_control" value="1" '.$checked.'/>
+                </td>
+              </tr>';
+
+        $checked = (!empty($CFG->block_student_gradeviewer_student_feedback)) ? 'checked="checked"' : '';
+
+        echo '<tr>
+                <td valign="top" align="right">
+                    '.get_string('student_feedback', 'block_student_gradeviewer').'
+                </td>
+                <td valign="top" align="left">
+                    <input type="hidden" name="block_student_gradeviewer_student_feedback" value="0"/>
+                    <input type="checkbox" name="block_student_gradeviewer_student_feedback" value="1" '.$checked.'/>
+                </td>
+              </tr>';
+ 
+        foreach($config_values as $val) {
+            echo '<tr>
+                <td valign="top" align="right">
+                    '. get_string('lagging_' . $val, 'block_student_gradeviewer') . '
+                </td>
+                <td align ="left">
+                    <input type="text" name="block_student_gradeviewer_lagging_'.$val.'"
+                           value="'. 
+                    ((isset($CFG->{'block_student_gradeviewer_lagging_' . $val})) ?
+                            $CFG->{'block_student_gradeviewer_lagging_' . $val} : 1) .
+                            '"/>
+                </td>
+            </tr>';
+        }
+    ?>
+   
+    <?php
+        foreach($semesters as $semester) {
+            echo '<tr>
+                    <td valign="top" align="right">
+                        <strong>
+                      '.get_string('when_to_report', 'block_student_gradeviewer') .
+                        get_string('format_semester', 'block_student_gradeviewer', $semester).'
+                        :</strong>
+                    </td>
+                  </tr>';
+            foreach(array('after' => $semester->class_start, 
+                          'prior' => $semester->grades_due) as $key => $time) {
+                $inputs = array_reduce(range(1,4), create_function('$in,$number', '
+                    global $CFG;
+                    $inter = (empty($in)) ? "" : $in;
+                    $name = "block_student_gradeviewer_reporting_'.
+                            $key.'_'.$semester->id.'_" . $number;
+                    $value = isset($CFG->{$name}) ? $CFG->{$name} : "";
+                    return $inter . 
+                    "<input type=\"text\" name=\"$name\" value=\"$value\" size=\"2\">";
+                '));
+                $a->time = date('m/d/Y', $time);
+                echo '<tr>
+                        <td valign="top" align="right">'.
+                      get_string('days_' . $key, 'block_student_gradeviewer', $a). '</td>
+                      <td>'.$inputs.'</td>
+                      </tr>';
+            }
+
+        }
+    ?>
+ 
+    <tr>
+        <td></td>
+        <td>
+            <input type="submit" value="<?php print_string('savechanges'); ?>" />
+        </td>
+    </tr>
+</table>
+</div>

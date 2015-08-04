@@ -1,0 +1,76 @@
+<h1><a name="top">Course Creation and Enrollment</a></h1>
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#terminology">Terminology</a></li>
+    <ul>
+    <li><a href="#terminology_defaultpreference">default preference</a></li>
+    <li><a href="#terminology_semesterpreference">semester preference</a></li>
+    <li><a href="#terminology_formatpreference">format preference</a></li>
+    <li><a href="#terminology_topicspreference">number of weeks/topics preference</a></li>
+    <li><a href="#terminology_availpreference">availability preference</a></li>
+    <li><a href="#terminology_deletepreference">delete preference</a></li>
+    </ul>
+<li><a href="#restrictions">Restrictions</a></li>
+    <ul>
+    <li><a href="#restrictions_creationbeforeenroll">Courses must be created before students are enrolled</a></li>
+    <li><a href="#restrictions_daysnotzero">Days must be greater than zero</a></li>
+    </ul>
+<li><a href="#relevant_help">Relevant Help</a></li>
+</ol>
+<a href="#top">Return to the top</a>
+<h2><a name="introduction">Introduction</a></h2>
+<p>
+Course creation and enrollment preferences allow you to determine when your Moodle courses are created and students are enrolled into them. 
+This benefits those who want to have their courses created and students enrolled sooner.  
+There are two types of creation and enrollment preferences: the number of days before the start of classes for Moodle
+courses to be created and number of days before the start of classes for students to be enrolled into Moodle courses.  
+These preferences are further split into two catagories: 
+<strong><a href="#terminology_defaultpreference">default preferences</a></strong> and <strong><a href="#terminology_semesterpreference">semester-specific preferences</a></strong>.
+</p>
+<a href="#top">Return to the top</a>
+<h2><a name="terminology">Terminology</a></h2>
+<dl>
+<dt><strong><a name="terminology_defaultpreference">default preferences</a></strong></dt>
+<dd>
+Preferences used whenever there are no semester-specific preferences set for a course.
+</dd>
+<dt><strong><a name="terminology_semesterpreference">semester preferences</a></strong></dt>
+<dd>
+Preferences set for specific courses within a semester that override the default preferences.
+</dd>
+<dt><strong><a name="terminology_formatpreference">format preferences</a></strong></dt>
+<dd>
+Will set the course format upon course creation (see <a href="help.php?module=moodle&amp;file=courseformats.html">Format</a>).
+</dd>
+<dt><strong><a name="terminology_topicspreference">number of weeks/topics preferences</a></strong></dt>
+<dd>
+Will set the number of weeks/topics with the course creation.
+</dd>
+<dt><strong><a name="terminology_availpreference">availability preferences</a></strong></dt>
+<dd>
+Will set the course availability upon course creation (see <a href="help.php?module=moodle&amp;file=courseavailability.html">Availability</a>).
+</dd>
+<dt><strong><a name="terminology_deletepreference">delete preferences</a></strong></dt>
+<dd>
+Cleanup preferences. Courses will be deleted when student enrollment equals zero, or at the end of the semester.
+</dd>
+</dl>
+<a href="#top">Return to the top</a>
+<h2><a name="restrictions">Restrictions</a></h2>
+<h3><a name="restrictions_creationbeforeenroll">Courses must be created before students are enrolled</a></h3>
+<p>
+As there must be a Moodle course for students to be enrolled into, it must be created before students are enrolled.  Thus the number of days to create courses must be greater than the number of days to enroll students.
+</p>
+<h3><a name="restrictions_daysnotzero">Days must be greater than zero</a></h3>
+<p>
+Creation and Enroll days must be set at a number greater or less than zero.
+</p>
+<a href="#top">Return to the top</a>
+<a href="#top">Return to the top</a>
+<h2><a name="relevant_help">Relevant Help</a></h2>
+<ul>
+<li><a href="help.php?module=block_courseprefs&amp;file=creation_enrol_default.html">More on default creation and enrollment preferences</a></li>
+<li><a href="help.php?module=block_courseprefs&amp;file=creation_enrol_semester.html">How to set semester-specific creation and enrollment preferences</a></li>
+</ul>
+<a href="#top">Return to the top</a>

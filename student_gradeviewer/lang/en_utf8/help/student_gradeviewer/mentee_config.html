@@ -1,0 +1,72 @@
+<?php
+    $page_name = get_string('mentee_config', 'block_student_gradeviewer');
+    $blockname = get_string('blockname', 'block_student_gradeviewer');
+    $cps = get_string('blockname', 'block_courseprefs');
+    $user_threshold = get_string('user_threshold', 'block_student_gradeviewer');
+    $viewgrade_link = $CFG->wwwroot . '/blocks/student_gradeviewer/viewgrades.php';
+    $viewgrades = get_string('view_grades', 'block_student_gradeviewer');
+    $cas_mentor = get_string('academics_mentor', 'block_student_gradeviewer');
+    $cas_admin_mentor = get_string('cas_admin_mentor', 'block_student_gradeviewer');
+    $acsa_mentor = get_string('sports_mentor', 'block_student_gradeviewer');
+    $acsa_admin_mentor = get_string('acsa_admin_mentor', 'block_student_gradeviewer');
+    $year = get_string('year', 'block_courseprefs');
+    $major = get_string('classification', 'block_courseprefs');
+    $college = get_string('college', 'block_courseprefs');
+?>
+
+<h1><?php echo $page_name; ?></h1>
+
+<p>The <strong><?php echo $page_name?></strong> section of the <strong><?php echo $blockname?></strong> contains block configuration
+   giving mentors the ability to view students' grades within Moodle. The block is dependent on the 
+    <strong><?php echo $cps?></strong> block. Please be sure that it is installed within your Moodle installation and
+   that it contains up-to-date student enrollment info.
+</p>
+
+<strong>Definitions</strong>
+<ul>
+    <li><strong><?php echo $user_threshold ?></strong>:
+        <p>
+        When mentors click on the <code><?php echo $viewgrade_link?></code> 
+        script, mentors can query specific students they are capable of viewing. 
+        The <strong><?php echo $user_threshold?></strong> field tells the system that if 
+        the mentor can only see a number of users that is less than or equal to this 
+        value, it will display everyone without a query submission. 
+        </p>
+        <p>
+        An example: 
+        a mentor only has 20 people assigned to him, and the <?php echo $user_threshold?> 
+        was set at 50. When the mentor would click 
+        <strong><?php echo $viewgrades?></strong>, he would see all the students under 
+        his defined capability without having to do any form submissions.
+        </p> 
+    </li>
+    <li><strong><?php echo $cas_mentor?></strong>:
+        <p>
+        A <strong><?php echo $cas_mentor?></strong> is a role within the <?php echo $blockname?> that has the
+        capability of viewing students under non-athletic criteria (Student's <?php echo $year?>, <?php echo $major?>,
+        and/or <?php echo $college?>), defined by a <strong><?php echo $cas_admin_mentor?></strong>.
+        </p>
+    </li>
+    <li><strong><?php echo $acsa_mentor?></strong>:
+        <p>
+        A <strong><?php echo $acsa_mentor?></strong> is a role within the <?php echo $blockname?> that has the
+        capability of viewing students under athletic criteria (Student's <?php print_string('sports', 
+        'block_courseprefs')?>), defined by a <strong><?php echo $acsa_admin_mentor?></strong>.
+        </p>
+    </li>
+    <li><strong><?php echo $cas_admin_mentor?></strong>:
+        <p>
+        A <strong><?php echo $cas_admin_mentor?></strong> is a role within the <?php echo $blockname?> that has the
+        capability of viewing and assigning <strong><?php echo $cas_mentor?>'s</strong> to 
+        non-athletic criteria (Student's <?php echo $year?>, <?php echo $major?>,
+        and/or <?php echo $college?>).
+        </p>
+    </li>
+    <li><strong><?php echo $acsa_admin_mentor?></strong>:
+        <p>
+        A <strong><?php echo $acsa_admin_mentor?></strong> is a role within the <?php echo $blockname?> that has the
+        capability of viewing and assigning <strong><?php echo $acsa_mentor?>'s</strong> to athletic criteria (Student's <?php print_string('sports', 
+        'block_courseprefs')?>).
+        </p>
+    </li>
+</ul>

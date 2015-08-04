@@ -1,0 +1,36 @@
+<h1>Content Viewer</h1>
+<h2>Table of Contents</h2>
+
+<ul>
+    <li><a href="#syntax">Syntax</a>
+    <ul>
+        <li><a href="#syntax_blank">Checking for Blanks</a></li>
+        <li><a href="#syntax_or">OR Syntax</a></li>
+        <li><a href="#syntax_like">LIKE Syntax</a></li>
+    </ul>
+    </li>
+</ul>
+
+<h2><a name="syntax">Syntax</a></h2>
+<p>
+The subsequent instructions will explain the proper syntax for searching for a specific student of group of students.
+</p>
+<h3><a name="syntax_blank">Checking for blanks</a></h3>
+<p>Enter the word '<strong>NULL</strong>' if you want to search for blanks or missing data. Conversely, if you are interested in fields that are NOT blank, then you must enter '<strong>NOT NULL</strong>'.</p>
+<h3><a name="syntax_or">OR Syntax</a></h3>
+<p>Commas translate into OR for fields. 
+<br/>For example: Say you were interested in students 
+   that have been going to class for 4 OR 5 years. 
+   Just enter: <strong>4,5</strong> in the input field under 'Year'.
+</p>
+<h3><a name="syntax_like">LIKE Syntax</a></h3>
+<p>For those of us who don't speak SQL, LIKE is equivalent to 'contains' in spoken English. 
+   For example: You need to find info on a person who goes by 'Brad', and his last name 
+   starts with a 'Z'. Not everyone who goes by 'Brad' is named 'Brad', but 'Bradley', etc. 
+   The 'Z' first letter should reduce most of the Brad's out there. 
+<br/>So, this is achieved by: 
+   <strong>Brad%</strong> for the first name, and <strong>Z%</strong> for the last name. 
+   You're telling the database to search for everyone with a first name starts with 'Brad' and 
+   a last name starts with 'Z'.
+</p>
+

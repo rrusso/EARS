@@ -1,0 +1,56 @@
+<?php
+    $cas_mentor = get_string('academics_mentor', 'block_student_gradeviewer');
+    $acsa_mentor = get_string('sports_mentor', 'block_student_gradeviewer');
+    $cas_admin = get_string('cas_admin_mentor', 'block_student_gradeviewer');
+    $acsa_admin = get_string('acsa_admin_mentor', 'block_student_gradeviewer');
+?>
+
+<h1><?php print_string('automatic_config', 'block_student_gradeviewer');?></h1>
+
+<strong>Definitions</strong>
+<ul>
+    <li><strong><?php print_string('enable_logging', 'block_student_gradeviewer')?></strong>:
+        <p>Option to disable the nightly cron job, altogether. This means no emails OR referrals</p>
+    </li>
+    <li>
+        <strong><?php print_string('cas_email', 'block_student_gradeviewer')?></strong>:
+        <p>
+            Enables emails to be sent to <?php echo $cas_mentor?>s, <?php echo $cas_admin?>s, 
+            instructors, and non-athletic students. Without this set none of the 
+            afore-mentioned will receive emails, but the system will still log referrals.
+        </p>
+    </li>
+    <li>
+        <strong><?php print_string('acsa_email', 'block_student_gradeviewer')?></strong>:
+        <p>
+            Enables emails to be sent to <?php echo $acsa_mentor?>s, <?php echo $acsa_admin?>s, 
+            instructors of athletes, and athletic students. Without this set none of the 
+            afore-mentioned will receive emails, but the system will still log referrals.
+        </p>
+    </li>
+    <li>
+        <strong><?php print_string('default_reporting', 'block_student_gradeviewer')?></strong>:
+        <p>
+            Default instructor reporting for each section that is processed. Primary, non-primaries, or students.
+        </p>
+    </li>
+    <li>
+        <strong><?php print_string('non_primary_control', 'block_student_gradeviewer');?></strong>:
+        <p>
+            Allows non-primary control over section reporting.
+        </p>
+    </li>
+    <li>
+        <strong><?php print_string('student_feedback', 'block_student_gradeviewer');?></strong>:
+        <p>
+            If the student recovers from 'at-risk' status, the student will be notified.
+        </p>
+    </li>
+    <li>
+        <strong>Deviation multipliers</strong>:
+        <p>
+            Negative standard deviation multipliers calculate students who are lagging behind.<br/>
+            Positive standard deviation multiplier calculate students who are exceptional.
+        </p>
+    </li>
+</ul>

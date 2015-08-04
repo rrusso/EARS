@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/course_preferences/db" VERSION="20110629" COMMENT="XMLDB file for Moodle blocks/course_preferences"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="block_courseprefs_courses" COMMENT="Default comment for block_courseprefs_courses, please edit me" NEXT="block_courseprefs_crosslist">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="department"/>
+        <FIELD NAME="department" TYPE="char" LENGTH="4" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="Code used to denote the department where the course resides." PREVIOUS="id" NEXT="course_number"/>
+        <FIELD NAME="course_number" TYPE="char" LENGTH="4" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="Four digit course number used in student catalog." PREVIOUS="department" NEXT="fullname"/>
+        <FIELD NAME="fullname" TYPE="char" LENGTH="254" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="Full name of course" PREVIOUS="course_number" NEXT="course_type"/>
+        <FIELD NAME="course_type" TYPE="char" LENGTH="3" NOTNULL="false" SEQUENCE="false" ENUM="true" ENUMVALUES="'CLI', 'IND', 'LEC', 'RES', 'SEM'" PREVIOUS="fullname" NEXT="grade_type"/>
+        <FIELD NAME="grade_type" TYPE="char" LENGTH="2" NOTNULL="true" DEFAULT="L" SEQUENCE="false" ENUM="true" ENUMVALUES="'LP', 'N', 'L'" COMMENT="Pass fail or not" PREVIOUS="course_type" NEXT="first_year"/>
+        <FIELD NAME="first_year" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="grade_type" NEXT="exception"/>
+        <FIELD NAME="exception" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="first_year" NEXT="legal_writing"/>
+        <FIELD NAME="legal_writing" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="exception"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocoucou-depcounum-uk" UNIQUE="true" FIELDS="department, course_number"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_crosslist" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_courseprefs_courses" NEXT="block_courseprefs_enroll">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="usersid"/>
+        <FIELD NAME="usersid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="Foreign key to course_preferences_users table; signifies instructor that setup cross listing." PREVIOUS="id" NEXT="sectionsid"/>
+        <FIELD NAME="sectionsid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="usersid" NEXT="status"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="resolved" SEQUENCE="false" ENUM="true" ENUMVALUES="'todo', 'resolved', 'undo'" PREVIOUS="sectionsid" NEXT="shell_name"/>
+        <FIELD NAME="shell_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="status" NEXT="idnumber"/>
+        <FIELD NAME="idnumber" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="shell_name"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocoucro-usesecsta-uk" UNIQUE="true" FIELDS="usersid, sectionsid, status"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_enroll" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_courseprefs_crosslist" NEXT="block_courseprefs_materials">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="usersid"/>
+        <FIELD NAME="usersid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="Foreign key to block_courseprefs_users table denoting teacher who set these preferences." PREVIOUS="id" NEXT="semestersid"/>
+        <FIELD NAME="semestersid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="usersid" NEXT="coursesid"/>
+        <FIELD NAME="coursesid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="Foreign key to block_courseprefs_courses table denoting course teacher's creation/enrollment settings will be applied to." PREVIOUS="semestersid" NEXT="course_create_days"/>
+        <FIELD NAME="course_create_days" TYPE="int" LENGTH="2" NOTNULL="true" UNSIGNED="true" DEFAULT="30" SEQUENCE="false" ENUM="false" COMMENT="Number of days before the start of classes this course will be created." PREVIOUS="coursesid" NEXT="course_enroll_days"/>
+        <FIELD NAME="course_enroll_days" TYPE="int" LENGTH="2" NOTNULL="true" UNSIGNED="true" DEFAULT="14" SEQUENCE="false" ENUM="false" COMMENT="Number of days before classes that students are enrolled into courses." PREVIOUS="course_create_days"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocouenr-usesemcou-uix" UNIQUE="true" FIELDS="usersid, semestersid, coursesid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_materials" COMMENT="Teachers preferences on whether materials courses should be created for courses." PREVIOUS="block_courseprefs_enroll" NEXT="block_courseprefs_sections">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="usersid"/>
+        <FIELD NAME="usersid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="Foreign key to block_courseprefs_users table denoting teacher who set this preference." PREVIOUS="id" NEXT="coursesid"/>
+        <FIELD NAME="coursesid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="Foreign key to block_courseprefs_courses table denoting course the teacher wanted  materials courses created for." PREVIOUS="usersid" NEXT="create_flag"/>
+        <FIELD NAME="create_flag" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" ENUM="false" PREVIOUS="coursesid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocoumat-usecou-uk" UNIQUE="true" FIELDS="usersid, coursesid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_sections" COMMENT="Listing of sections that a course is divided into." PREVIOUS="block_courseprefs_materials" NEXT="block_courseprefs_semesters">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="semestersid"/>
+        <FIELD NAME="semestersid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="coursesid"/>
+        <FIELD NAME="coursesid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="Foreign key to block_courseprefs_courses table denoting course this section belongs to." PREVIOUS="semestersid" NEXT="section_number"/>
+        <FIELD NAME="section_number" TYPE="char" LENGTH="3" NOTNULL="true" DEFAULT="001" SEQUENCE="false" ENUM="false" COMMENT="Section code designation" PREVIOUS="coursesid" NEXT="idnumber"/>
+        <FIELD NAME="idnumber" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="section_number" NEXT="status"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="pending" SEQUENCE="false" ENUM="true" ENUMVALUES="'pending', 'completed', 'unwant', 'unwanted', 'requested'" PREVIOUS="idnumber" NEXT="timestamp"/>
+        <FIELD NAME="timestamp" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="Time stamp" PREVIOUS="status"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocousec-semcousecnum-uk" UNIQUE="true" FIELDS="semestersid, coursesid, section_number"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_semesters" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_courseprefs_sections" NEXT="block_courseprefs_split">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="year"/>
+        <FIELD NAME="year" TYPE="char" LENGTH="4" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="Academic year of semester" PREVIOUS="id" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="year" NEXT="campus"/>
+        <FIELD NAME="campus" TYPE="char" LENGTH="3" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="Code used to denote the campus the semester applies to." PREVIOUS="name" NEXT="class_start"/>
+        <FIELD NAME="class_start" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="Unix timestamp signifying the start of classes." PREVIOUS="campus" NEXT="grades_due"/>
+        <FIELD NAME="grades_due" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="Unix timestamp signifying when grades are due" PREVIOUS="class_start"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocousem-yeanamcam-uk" UNIQUE="true" FIELDS="year, name, campus"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_split" COMMENT="Listing of teachers preferences for courses' sections to be created as individual courses." PREVIOUS="block_courseprefs_semesters" NEXT="block_courseprefs_students">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="usersid"/>
+        <FIELD NAME="usersid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="Foreign key to block_courseprefs_users table denoting teacher who set this preference." PREVIOUS="id" NEXT="sectionsid"/>
+        <FIELD NAME="sectionsid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="usersid" NEXT="groupingsid"/>
+        <FIELD NAME="groupingsid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="sectionsid" NEXT="status"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="resolved" SEQUENCE="false" ENUM="true" ENUMVALUES="'todo', 'resolved', 'undo'" PREVIOUS="groupingsid" NEXT="shell_name"/>
+        <FIELD NAME="shell_name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="Testing" PREVIOUS="status"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocouspl-usesecgrosta-uk" UNIQUE="true" FIELDS="usersid, sectionsid, groupingsid, status"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_students" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_courseprefs_split" NEXT="block_courseprefs_teachers">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="usersid"/>
+        <FIELD NAME="usersid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="Foreign key to course_preferences_users table" PREVIOUS="id" NEXT="sectionsid"/>
+        <FIELD NAME="sectionsid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="usersid" NEXT="status"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="enroll" SEQUENCE="false" ENUM="true" ENUMVALUES="'enrolled', 'enroll', 'unenrolled', 'unenroll'" PREVIOUS="sectionsid" NEXT="credit_hours"/>
+        <FIELD NAME="credit_hours" TYPE="number" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="3.00" SEQUENCE="false" ENUM="false" DECIMALS="2" PREVIOUS="status"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocoustu-usesec-uix" UNIQUE="true" FIELDS="usersid, sectionsid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_teachers" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_courseprefs_students" NEXT="block_courseprefs_teamteach">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="usersid"/>
+        <FIELD NAME="usersid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="Foreign key to course_preferences_users table; signifies user who is a teacher of a course referenced by the coursesid column." PREVIOUS="id" NEXT="sectionsid"/>
+        <FIELD NAME="sectionsid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="usersid" NEXT="primary_flag"/>
+        <FIELD NAME="primary_flag" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" ENUM="false" COMMENT="Boolean flag whether user referenced by the usersid column is the primary instructor of the course or not; 0/1." PREVIOUS="sectionsid" NEXT="status"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="enroll" SEQUENCE="false" ENUM="true" ENUMVALUES="'enrolled', 'enroll', 'unenrolled', 'unenroll'" PREVIOUS="primary_flag" NEXT="timestamp"/>
+        <FIELD NAME="timestamp" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="status"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocoutea-usesecpri-uix" UNIQUE="true" FIELDS="usersid, sectionsid, primary_flag"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_teamteach" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_courseprefs_teachers" NEXT="block_courseprefs_users">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="usersid"/>
+        <FIELD NAME="usersid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="Foreign key to course_preferences_users table.  Signifies instructor who setup team teaching for a course s/he owned." PREVIOUS="id" NEXT="sectionsid"/>
+        <FIELD NAME="sectionsid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="usersid" NEXT="tt_sectionsid"/>
+        <FIELD NAME="tt_sectionsid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="sectionsid" NEXT="approval_flag"/>
+        <FIELD NAME="approval_flag" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="tt_sectionsid" NEXT="status"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="resolved" SEQUENCE="false" ENUM="true" ENUMVALUES="'todo', 'resolved', 'undo'" PREVIOUS="approval_flag"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocouteam-usesecttsec" UNIQUE="true" FIELDS="usersid, sectionsid, tt_sectionsid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_users" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_courseprefs_teamteach" NEXT="block_courseprefs_config">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="username"/>
+        <FIELD NAME="username" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="Username that user logs in with; maps to the username column of Moodle's user table." PREVIOUS="id" NEXT="firstname"/>
+        <FIELD NAME="firstname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="User's first name" PREVIOUS="username" NEXT="lastname"/>
+        <FIELD NAME="lastname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="User's last name" PREVIOUS="firstname" NEXT="update_flag"/>
+        <FIELD NAME="update_flag" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" ENUM="false" COMMENT="0/1 boolean flag signaling whether user information was updated upon import.  This should be picked up by the processing script and a  entity should be generated accordingly." PREVIOUS="lastname" NEXT="idnumber"/>
+        <FIELD NAME="idnumber" TYPE="char" LENGTH="11" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="update_flag" NEXT="year"/>
+        <FIELD NAME="year" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="idnumber" NEXT="college"/>
+        <FIELD NAME="college" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="year" NEXT="reg_status"/>
+        <FIELD NAME="reg_status" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="college" NEXT="classification"/>
+        <FIELD NAME="classification" TYPE="char" LENGTH="15" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="reg_status" NEXT="keypadid"/>
+        <FIELD NAME="keypadid" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="classification" NEXT="moodleid"/>
+        <FIELD NAME="moodleid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="keypadid" NEXT="degree_candidacy"/>
+        <FIELD NAME="degree_candidacy" TYPE="char" LENGTH="1" NOTNULL="true" DEFAULT="N" SEQUENCE="false" ENUM="false" PREVIOUS="moodleid" NEXT="anonymous"/>
+        <FIELD NAME="anonymous" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="degree_candidacy" NEXT="ferpa"/>
+        <FIELD NAME="ferpa" TYPE="char" LENGTH="1" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="anonymous" NEXT="format"/>
+        <FIELD NAME="format" TYPE="char" LENGTH="50" NOTNULL="true" DEFAULT="topics" SEQUENCE="false" ENUM="false" PREVIOUS="ferpa" NEXT="numsections"/>
+        <FIELD NAME="numsections" TYPE="int" LENGTH="3" NOTNULL="true" UNSIGNED="true" DEFAULT="17" SEQUENCE="false" ENUM="false" PREVIOUS="format" NEXT="hidden"/>
+        <FIELD NAME="hidden" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="numsections" NEXT="cr_delete"/>
+        <FIELD NAME="cr_delete" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" ENUM="false" PREVIOUS="hidden"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocouuse-use-uix" UNIQUE="true" FIELDS="username"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_config" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_courseprefs_users" NEXT="block_courseprefs_logs">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="128" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="value"/>
+        <FIELD NAME="value" TYPE="text" LENGTH="small" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="name"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocoucon-nam-uix" UNIQUE="true" FIELDS="name"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_logs" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_courseprefs_config" NEXT="block_courseprefs_sports">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="timestamp"/>
+        <FIELD NAME="timestamp" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="usersid"/>
+        <FIELD NAME="usersid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="timestamp" NEXT="sectionsid"/>
+        <FIELD NAME="sectionsid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="usersid" NEXT="action"/>
+        <FIELD NAME="action" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="sectionsid" NEXT="info"/>
+        <FIELD NAME="info" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="action"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="bloclogs_tim_ix" UNIQUE="false" FIELDS="timestamp" NEXT="bloclogs_act_ix"/>
+        <INDEX NAME="bloclogs_act_ix" UNIQUE="false" FIELDS="action" PREVIOUS="bloclogs_tim_ix" NEXT="bloclogs_usesec_ix"/>
+        <INDEX NAME="bloclogs_usesec_ix" UNIQUE="false" FIELDS="usersid, sectionsid" PREVIOUS="bloclogs_act_ix" NEXT="bloclogs_usesecact_ix"/>
+        <INDEX NAME="bloclogs_usesecact_ix" UNIQUE="false" FIELDS="usersid, sectionsid, action" PREVIOUS="bloclogs_usesec_ix"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_sports" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_courseprefs_logs" NEXT="block_courseprefs_sportusers">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="code"/>
+        <FIELD NAME="code" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="code"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocouspo-nam-uix" UNIQUE="true" FIELDS="name"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_sportusers" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_courseprefs_sports" NEXT="block_courseprefs_hooks">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="sportsid"/>
+        <FIELD NAME="sportsid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="usersid"/>
+        <FIELD NAME="usersid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="sportsid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blocouspouse-spouse-ix" UNIQUE="false" FIELDS="sportsid, usersid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseprefs_hooks" COMMENT="table storing all registered hooks." PREVIOUS="block_courseprefs_sportusers">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="Name of the moodle object, associated with hook." PREVIOUS="id" NEXT="type"/>
+        <FIELD NAME="type" TYPE="char" LENGTH="100" NOTNULL="true" DEFAULT="block" SEQUENCE="false" ENUM="true" ENUMVALUES="'block', 'mod', 'enrol', 'auth', 'report', 'import', 'export', 'user'" PREVIOUS="name"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="bloc_couhoonam" UNIQUE="true" FIELDS="name"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

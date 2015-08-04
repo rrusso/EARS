@@ -1,0 +1,22 @@
+<h1>Mentor Administration</h1>
+<span>This area is for mentor administration. CAS or ASCA mentors will be assigned
+through the following means.</span>
+
+<ul>
+    <?php
+    $context = get_context_instance(CONTEXT_SYSTEM);
+    if(has_capability('block/student_gradeviewer:academicadmin',$context)) {
+    echo '<li>
+            <a href="help.php?module=block_student_gradeviewer&amp;file=admin_page_academics.html">CAS Administration</a>
+         </li>';
+    } 
+    if(has_capability('block/student_gradeviewer:sportsadmin', $context)) {
+    echo '<li>
+            <a href="help.php?module=block_student_gradeviewer&amp;file=admin_page_sports.html">ACSA Administration</a>
+         </li>';
+    }
+    ?>
+    <li>
+        <a href="help.php?module=block_student_gradeviewer&amp;file=admin_page_person.html">Assigning specific students to mentors</a>
+    </li>
+</ul>

@@ -1,0 +1,25 @@
+****************************
+*    Installation Notes    *
+****************************
+
+In order for your system to use the student_gradeviewer block,
+some dependencies must be taken care of first.
+
+1. Make sure the courseprefs block is installed. This block requires
+tables from that block, so it should be present in your system.
+
+2. Install the gradeviewer block.
+
+3. Create admin roles for CAS and ACSA administration and mentors, so 4
+roles to be created in total. Admins should have both admin and view grades, 
+and mentors should be configured to only see the grades of their category, ie:
+regular mentors can view grades, whereas sport mentors can only view grades
+of sport students.
+
+4. Navigate to the blocks admin settings, and map the roles to the created
+Moodle roles.
+
+5. Make sure the data is populated correctly: Sport codes and relationships,
+year, college, and majors for students.
+
+You're ready to begin.
